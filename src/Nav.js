@@ -5,6 +5,7 @@ class Nav extends Component {
   render() {
     return (
       <div>
+        <nav>
         <ul>
           <li>
             <Link to="/">Home</Link>
@@ -13,6 +14,7 @@ class Nav extends Component {
             <Link to="/profile">Profile</Link>
           </li>
         </ul>
+        </nav>
       </div>
     );
   }
