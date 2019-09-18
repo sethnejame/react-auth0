@@ -29,8 +29,11 @@ class App extends Component {
             // Home w/ auth props, then spread any other props
             render={props => <Home auth={this.auth} {...props} />}
           />
+          <Route
+            path="/callback"
+            render={props => <Callback auth={this.auth} {...props} />}
+          />
           <Route path="/profile" component={Profile} />
-          <Route path="/callback" component={Callback} />
         </div>
       </>
     );
