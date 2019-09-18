@@ -41,13 +41,20 @@ export default class Auth {
       authResult.expiresIn * 1000 + new Date().getTime()
     );
     // store the authResult in the browser's local storage
-    localStorage.setItem("access_token", authResult.accessToken)
-    localStorage.setItem("id_token", authResult.idToken)
-    localStorage.setItem("expires_at", expiresAt)
+    localStorage.setItem("access_token", authResult.accessToken);
+    localStorage.setItem("id_token", authResult.idToken);
+    localStorage.setItem("expires_at", expiresAt);
   };
 
   isAuthenticated() {
-    const expiresAt = JSON.parse(localStorage.getItem("expires_at"))
+    const expiresAt = JSON.parse(localStorage.getItem("expires_at"));
     return new Date().getTime() < expiresAt;
   }
+
+  logout = () => {
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("id_token");
+    localStorage.removeItem("expires_at");
+    this.history.push("/");
+  };
 }
