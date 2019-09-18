@@ -1,5 +1,4 @@
 import auth0 from "auth0-js";
-import { classBody } from "@babel/types";
 
 export default class Auth {
   // below we pass in the history from React Router
@@ -75,8 +74,8 @@ export default class Auth {
   getProfile = cb => {
     if (this.userProfile) return cb(this.userProfile);
     this.auth0.client.userInfo(this.getAccessToken(), (err, profile) => {
-      if(profile) this.userProfile = profile;
+      if (profile) this.userProfile = profile;
       cb(profile, err);
-    })
-  }
+    });
+  };
 }
