@@ -9,6 +9,7 @@ import Private from "./Private";
 import Courses from "./Courses";
 import Auth from "./Auth/Auth";
 import PrivateRoute from "./PrivateRoute";
+import AuthContext from './AuthContext'
 
 class App extends Component {
   constructor(props) {
@@ -16,12 +17,15 @@ class App extends Component {
     // hist will be auto injected into this component (props) because
     // we wrapped "App" in Router in Index.js
     // we pass the hist into Auth so Auth can interact with Router
-    this.auth = new Auth(this.props.history);
+    this.state={
+      auth: new Auth(this.props.history)
+    }
   }
   render() {
+    const { auth } = this.state
     return (
-      <>
-        <Nav auth={this.auth} />
+      <AuthContext.Provider value={auth}>
+        <Nav auth={auth} />
         <div className="body">
           <Route
             path="/"
@@ -31,23 +35,23 @@ class App extends Component {
             // for this, we use render and the below syntax
             // render takes props as an arg, then we pass in
             // Home w/ auth props, then spread any other props
-            render={props => <Home auth={this.auth} {...props} />}
+            render={props => <Home auth={auth} {...props} />}
           />
           <Route
             path="/callback"
-            render={props => <Callback auth={this.auth} {...props} />}
+            render={props => <Callback auth={auth} {...props} />}
           />
-          <PrivateRoute path="/profile" component={Profile} auth={this.auth} />
+          <PrivateRoute path="/profile" component={Profile} auth={auth} />
           <Route path="/public" component={Public} />
-          <PrivateRoute path="/private" component={Private} auth={this.auth} />
+          <PrivateRoute path="/private" component={Private} auth={auth} />
           <PrivateRoute
             path="/courses"
             component={Courses}
             scopes={["read:courses"]}
-            auth={this.auth}
+            auth={auth}
           />
         </div>
-      </>
+      </AuthContext.Provider>
     );
   }
 }
