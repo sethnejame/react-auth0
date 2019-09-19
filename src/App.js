@@ -46,7 +46,10 @@ class App extends Component {
             }
           />
           <Route path="/public" component={Public} />
-          <Route path="/private" component={Private} />
+          <Route
+            path="/private"
+            render={props => <Private auth={this.auth} {...props} />}
+          />
         </div>
       </>
     );
