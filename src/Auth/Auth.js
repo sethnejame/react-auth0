@@ -37,7 +37,7 @@ export default class Auth {
         this.setSession(authResult);
         // adding redirect location after login
         const redirectLocation =
-          localStorage.getIem(REDIRECT_ON_LOGIN) === "undefined"
+          localStorage.getItem(REDIRECT_ON_LOGIN) === "undefined"
             ? "/"
             : JSON.parse(localStorage.getItem(REDIRECT_ON_LOGIN));
         // redir app back to previous page
