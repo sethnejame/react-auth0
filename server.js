@@ -2,6 +2,7 @@ const express = require("express"); // express is a Node-based library used for 
 require("dotenv").config(); // dotenv automatically gives us access to environment variables (.env) inside this file
 const jwt = require("express-jwt"); // Validate JWT and set req.user
 const jwksRsa = require("jwks-rsa"); // Retrieve RSA keys from a JSON Web Key set (JWKS) endpoint
+const checkScope = require("express-jwt-authz"); // Check auth scopes
 
 const checkJwt = jwt({
   // Dynamically provide a signing key based on the kid in the header
@@ -34,6 +35,15 @@ app.get("/public", function(req, res) {
 app.get("/private", checkJwt, function(req, res) {
   res.json({
     message: "Hello from a private API!"
+  });
+});
+
+app.get("/courses", checkJwt, checkScope(["read:courses"]), function(req, res) {
+  res.json({
+    courses: [
+      { id: 1, title: "Building Apps with React and Redux" },
+      { id: 2, title: "Creating Reusable React Components" }
+    ]
   });
 });
 
