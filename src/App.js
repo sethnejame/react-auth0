@@ -5,6 +5,7 @@ import Profile from "./Profile";
 import Callback from "./Callback";
 import Nav from "./Nav";
 import Public from "./Public";
+import Private from "./Private";
 import Auth from "./Auth/Auth";
 
 class App extends Component {
@@ -45,6 +46,7 @@ class App extends Component {
             }
           />
           <Route path="/public" component={Public} />
+          <Route path="/private" component={Private} />
         </div>
       </>
     );
