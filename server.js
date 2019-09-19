@@ -38,6 +38,24 @@ app.get("/private", checkJwt, function(req, res) {
   });
 });
 
+function checkRole(role) {
+  // express middleware must return a function that accepts three args. . .next passes control to next middleware item
+  return function(req, res, next) {
+    const assignedRoles = req.user["http://localhost:3000/roles"];
+    if (Array.isArray(assignedRoles) && assignedRoles.includes(role)) {
+      return next(); // signifies success, allows processing to continue
+    } else {
+      return res.status(401).send("Insufficient role");
+    }
+  };
+}
+
+app.get("/admin", checkJwt, checkRole("admin"), function(req, res) {
+  res.json({
+    message: "Hello from an admin API!"
+  });
+});
+
 app.get("/courses", checkJwt, checkScope(["read:courses"]), function(req, res) {
   res.json({
     courses: [
