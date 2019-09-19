@@ -2,6 +2,12 @@ import auth0 from "auth0-js";
 
 const REDIRECT_ON_LOGIN = "redirect_on_login";
 
+// Stored ouside class since private
+let _idToken = null;
+let _accessToken = null;
+let _scopes = null;
+let _expiresAt = null;
+
 export default class Auth {
   // below we pass in the history from React Router
   constructor(history) {
