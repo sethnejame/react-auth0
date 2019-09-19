@@ -5,13 +5,14 @@ export default class Auth {
   constructor(history) {
     this.history = history;
     this.userProfile = null;
+    this.requestedScopes = "openid profile email read:courses";
     this.auth0 = new auth0.WebAuth({
       domain: process.env.REACT_APP_AUTH0_DOMAIN,
       clientID: process.env.REACT_APP_AUTH0_CLIENT_ID,
       redirectUri: process.env.REACT_APP_AUTH0_CALLBACK_URL,
       audience: process.env.REACT_APP_AUTH0_AUDIENCE,
       responseType: "token id_token", // gives us both an id token (for authentication) and access token (for authorization)
-      scope: "openid profile email" // this means we wanna use openid for authentication. . .gives us access to user's profile (name, pic, etc)
+      scope: this.requestedScopes // this means we wanna use openid for authentication. . .gives us access to user's profile (name, pic, etc)
     });
   }
 
@@ -42,10 +43,18 @@ export default class Auth {
     const expiresAt = JSON.stringify(
       authResult.expiresIn * 1000 + new Date().getTime()
     );
+
+    // If there is a value on the `scope` param from the authResult,
+    // use it to set scopes in the session for the user. Otherwise
+    // use the scopes as requested.  If no scopes were requested,
+    // set it to nothing
+    const scopes = authResult.scope || this.requestedScopes || "";
+
     // store the authResult in the browser's local storage
     localStorage.setItem("access_token", authResult.accessToken);
     localStorage.setItem("id_token", authResult.idToken);
     localStorage.setItem("expires_at", expiresAt);
+    localStorage.setItem("scopes", JSON.stringify(scopes));
   };
 
   isAuthenticated() {
